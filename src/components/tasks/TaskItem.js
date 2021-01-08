@@ -1,8 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import { ItemTypes } from '../../util/itemTypes';
 import TaskForm from './TaskForm';
 
 export default function TaskItem(props) {
+	const ref = useRef();
 	const [showForm, setForm] = useState(false);
+
+	const [{ isDragging }, drag] = useDrag({
+	  item: {
+	  	type: ItemTypes.TASK,
+	  	taskId: props.task.id,
+	  	indx: props.indx
+	  },
+	  collect: (monitor) => ({
+	    isDragging: !!monitor.isDragging()
+	  })
+	});
+
+	const [{ isOver }, drop] = useDrop({
+		accept: ItemTypes.TASK,
+		drop(item, monitor) {
+			props.taskDropped();
+		},
+		hover(item, monitor) {
+			const dragIndex = item.indx;
+			const hoverIndex = props.indx;
+			if (dragIndex === hoverIndex) { return; }
+
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      props.sortTask(dragIndex, hoverIndex);
+		},
+		collect: monitor => ({
+			isOver: monitor.isOver(),
+		})
+	});
 
 	const changeTaskStatus = (e) => {
 		e.preventDefault();
@@ -28,8 +69,11 @@ export default function TaskItem(props) {
 
 	const { id: taskId, task_group_id: taskGroupId, name } = props.task;
 
+	drag(drop(ref));
 	return (
-		<div className={`Task-Item-Cont ${props.task.completed ? "Completed" : ""}`}>
+		<div ref={ref}
+				 className={`Task-Item-Cont ${props.task.completed ? "Completed" : ""}`}
+				 style={{ opacity: (isDragging ? 0.4 : 1)}}>
 			{
 				showForm ?
 					<TaskForm taskId={taskId}

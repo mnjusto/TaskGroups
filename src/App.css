@@ -99,12 +99,16 @@ form.Task-Group-Form input[type=text] {
 .Task-Group-Add-Btn-Cont {
   padding: 10px;
 }
+.Task-List-Item-Cont {
+  min-height: 10px;
+}
 
 .Task-Item-Cont {
   background-color: #FFF;
   border: 1px solid #DEDEDE;
   border-radius: 6px;
   box-shadow: 0px 0px 4px #DEDEDE;
+  margin-bottom: 10px;
   padding: 10px;
 }
 
