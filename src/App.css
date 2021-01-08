@@ -79,7 +79,7 @@ form.Task-Group-Form input[type=text] {
   padding: 10px 0;
 }
 
-.Task-Group-Item-Cont a:first-child {
+.Tgitem-Head a:first-child {
   margin-right: 10px
 }
 
@@ -98,6 +98,30 @@ form.Task-Group-Form input[type=text] {
 
 .Task-Group-Add-Btn-Cont {
   padding: 10px;
+}
+
+.Task-Item-Cont {
+  background-color: #FFF;
+  border: 1px solid #DEDEDE;
+  border-radius: 6px;
+  box-shadow: 0px 0px 4px #DEDEDE;
+  padding: 10px;
+}
+
+.Task-Item-Cont.Completed {
+  background-color: #BABABA;
+}
+
+.Task-Item-Cont a {
+  text-align: right;
+}
+
+.Task-Item-Cont .Btn-Cont a {
+  margin-right: 10px;
+}
+
+.Task-Item-Cont .Btn-Cont a:last-child {
+  margin-right: 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {

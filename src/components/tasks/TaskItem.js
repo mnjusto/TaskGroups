@@ -4,6 +4,15 @@ import TaskForm from './TaskForm';
 export default function TaskItem(props) {
 	const [showForm, setForm] = useState(false);
 
+	const changeTaskStatus = (e) => {
+		e.preventDefault();
+		let tasks = JSON.parse(localStorage.getItem("tasks"));
+		let indx = tasks.findIndex((task) => { return task.id === props.task.id });
+		tasks[indx] = { ...tasks[indx], completed: !props.task.completed }
+		localStorage.setItem("tasks", JSON.stringify(tasks));
+		props.checkTaskstorage();
+	}
+
 	const changeShowForm = (show, e) => {
 		if (e) { e.preventDefault(); }
 		setForm(show)
@@ -14,13 +23,13 @@ export default function TaskItem(props) {
 		let tasks = JSON.parse(localStorage.getItem("tasks"));
 		let newTasks = tasks.filter((task) => { return task.id !== props.task.id });
 		localStorage.setItem("tasks", JSON.stringify(newTasks));
-		props.checkTaskstorage()
+		props.checkTaskstorage();
 	}
 
 	const { id: taskId, task_group_id: taskGroupId, name } = props.task;
 
 	return (
-		<div>
+		<div className={`Task-Item-Cont ${props.task.completed ? "Completed" : ""}`}>
 			{
 				showForm ?
 					<TaskForm taskId={taskId}
@@ -30,10 +39,10 @@ export default function TaskItem(props) {
 										cancel={ changeShowForm }/>
 					:
 					<React.Fragment>
-						<span>{taskId}</span>
 						<span>{name}</span>
 
-						<div>
+						<div className="Btn-Cont">
+							<a href="#" onClick={(e) => {changeTaskStatus(e)}}>{ props.task.completed ? "Revive" : "Complete"}</a>
 							<a href="#" onClick={(e) => {changeShowForm(true, e)}}>Edit</a>
 							<a href="#" onClick={(e) => {deleteTask(e)}}>Delete</a>
 						</div>

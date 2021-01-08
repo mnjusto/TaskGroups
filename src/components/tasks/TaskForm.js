@@ -19,8 +19,7 @@ export default function TaskForm(props) {
 
 	const setTaskObj = () => {
 		let taskNameVal = taskName.current.value;
-		console.log(taskNameVal);
-		return { id: nextTaskId(), task_group_id: props.taskGroupId, name: taskNameVal }
+		return { id: nextTaskId(), task_group_id: props.taskGroupId, name: taskNameVal, completed: false }
 	}
 
 	const createTask = () => {
@@ -41,7 +40,7 @@ export default function TaskForm(props) {
 		let tasks = JSON.parse(localStorage.getItem("tasks"));
 		let indx = tasks.findIndex((task) => { return task.id === props.taskId });
 		let taskNameVal = taskName.current.value;
-		tasks[indx] = { id: props.taskId, task_group_id: props.taskGroupId, name: taskNameVal }
+		tasks[indx] = { ...tasks[indx], name: taskNameVal }
 		localStorage.setItem("tasks", JSON.stringify(tasks));
 		props.checkTaskstorage();
 		props.cancel(false);
