@@ -29,16 +29,11 @@ export default function TaskItem(props) {
 			if (dragIndex === hoverIndex) { return; }
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
+      if (dragIndex > hoverIndex && (hoverBoundingRect.top + (hoverBoundingRect.height / 1.5) > clientOffset.y) ) {
+      	props.sortTask(dragIndex, hoverIndex);
+      	item.indx = hoverIndex;
       }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-      props.sortTask(dragIndex, hoverIndex);
 		},
 		collect: monitor => ({
 			isOver: monitor.isOver(),

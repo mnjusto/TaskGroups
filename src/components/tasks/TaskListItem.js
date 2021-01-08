@@ -22,30 +22,29 @@ export default function TaskListItem(props) {
 
 	const sortTask = useCallback((draggedIndex, hoverIndex) => {
 		console.log(draggedIndex, hoverIndex)
-		let higherArr = [];
-		let lowerArr = [];
 		let newTasks = [];
 		let taskCopy = [...tasks];
 
-		if (draggedIndex > hoverIndex) {
-			higherArr = [taskCopy[hoverIndex], ...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
-			lowerArr = [...taskCopy.slice(0, hoverIndex), taskCopy[draggedIndex]]
-		} else {
-			higherArr = [taskCopy[draggedIndex], ...taskCopy.slice(hoverIndex + 1, taskCopy.length)];
-			lowerArr = [...taskCopy.slice(0, draggedIndex), taskCopy[hoverIndex]]
-		}
-		newTasks = [...lowerArr, ...higherArr]
+		// if (draggedIndex > hoverIndex) {
 
-		console.log(newTasks)
+		// } else {
+		// 	console.log("Hey");
+		// 	let y = [...taskCopy.slice(0, hoverIndex)];
+		// 	y[hoverIndex] = taskCopy[draggedIndex];
+		// 	newTasks = [...y, ...taskCopy.slice(hoverIndex, draggedIndex),...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
+		// }
+
+		let y = [...taskCopy.slice(0, hoverIndex)];
+		y[hoverIndex] = taskCopy[draggedIndex];
+		newTasks = [...y, ...taskCopy.slice(hoverIndex, draggedIndex),...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
 
 		setTasks(newTasks);
   }, [tasks]);
 
   const taskDropped = () => {
-		// let tasksStorage = localStorage.getItem('tasks');
-		// let newTasks = JSON.parse(tasksStorage).filter((task) => { return task.task_group_id !== props.taskGroupId });
-		// newTasks.push([...newTasks, tasks]);
-		// localStorage.setItem('tasks', JSON.stringify(newTasks));
+		let tasksStorage = localStorage.getItem('tasks');
+		let newTasks = JSON.parse(tasksStorage).filter((task) => { return task.task_group_id !== props.taskGroupId });
+		localStorage.setItem('tasks', JSON.stringify([...newTasks, ...tasks]));
   }
 
 	const checkTaskstorage = () => {
