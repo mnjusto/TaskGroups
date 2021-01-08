@@ -38,7 +38,13 @@ export default function TaskForm(props) {
 	}
 
 	const updateTask = () => {
-
+		let tasks = JSON.parse(localStorage.getItem("tasks"));
+		let indx = tasks.findIndex((task) => { return task.id === props.taskId });
+		let taskNameVal = taskName.current.value;
+		tasks[indx] = { id: props.taskId, task_group_id: props.taskGroupId, name: taskNameVal }
+		localStorage.setItem("tasks", JSON.stringify(tasks));
+		props.checkTaskstorage();
+		props.cancel(false);
 	}
 
 	const submit = (e) => {
@@ -52,8 +58,7 @@ export default function TaskForm(props) {
 
 	return (
 		<form onSubmit={(e) => submit(e)}>
-			<input ref={taskName} type="text"/>
-
+			<input ref={taskName} type="text" defaultValue={ props.taskName || "" } placeholder="task here..."/>
 			<input type="button" className="Button" value="Save" onClick={(e) => submit(e)}/>
 			<button type="button" className="Button" onClick={(e) => props.cancel()}>Cancel</button>
 		</form>

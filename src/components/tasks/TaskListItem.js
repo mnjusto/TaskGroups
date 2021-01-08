@@ -21,11 +21,13 @@ export default function TaskListItem(props) {
 			<div>
 				{
 					tasks.map(task => {
-						return <TaskItem task={task}
+						return <TaskItem key={task.id}
+														 task={task}
 														 checkTaskstorage={checkTaskstorage}/>
 					})
 				}
 			</div>
+			<hr/>
 			<AddTaskFormCont taskGroupId={ props.taskGroupId }
 											 checkTaskstorage={checkTaskstorage}/>
 		</React.Fragment>
