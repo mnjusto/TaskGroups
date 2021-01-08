@@ -84,7 +84,8 @@ form.Task-Group-Form input[type=text] {
 }
 
 .Tgitem-Head {
-  border-bottom: 1px solid #BCBCBC
+  border-bottom: 1px solid #BCBCBC;
+  margin-bottom: 10px;
 }
 
 .Tgitem-Head .Task-Group-Form {

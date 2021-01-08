@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TaskGroupForm from './TaskGroupForm';
+import TaskListItem from '../tasks/TaskListItem';
 
 function TaskGroupItem(props) {
 	const [showForm, setForm] = useState(false);
@@ -35,6 +36,7 @@ function TaskGroupItem(props) {
 					</React.Fragment>
 				}
 			</div>
+			<TaskListItem taskGroupId={props.taskGroup.id}/>
 		</div>
 	)
 }
