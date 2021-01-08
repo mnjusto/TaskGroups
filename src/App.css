@@ -1,10 +1,102 @@
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+input[type=text] {
+  border: 1px solid #BCBCBC;
+  border-radius: 6px;
+  padding: 8px 10px;
+  width: -webkit-fill-available;
+}
+
+input[type=text]:focus {
+  outline: none;
+  box-shadow: 0 0 4px #BCBCBC
+}
+
+a {
+  text-decoration: none;
+}
+
 .App {
+  height: 100vh;
+  padding: 20px;
+}
+
+.App-title {
   text-align: center;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.Button {
+  background-color: #3f51b5;
+  border: 1px solid;
+  border-radius: 6px;
+  color: #FFF;
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px 12px;
+}
+
+.Button:hover {
+  background-color: #008CBA;
+}
+
+.Button.mgrght {
+  margin-right: 10px
+}
+
+.List-Cont {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Task-Group-Form-Cont {
+  border: 1px solid #DEDEDE;
+  border-radius: 6px;
+  max-width: 300px;
+  padding: 10px;
+}
+
+form.Task-Group-Form input[type=text] {
+  margin: 10px;
+}
+
+.Task-Group-Item-Cont {
+  border: 1px solid #DEDEDE;
+  border-radius: 6px;
+  margin: 0 10px 10px 0;
+  min-width: 300px;
+  padding: 10px;
+}
+
+.Task-Group-Item-Cont span {
+  display: inline-block;
+  padding: 10px 0;
+}
+
+.Task-Group-Item-Cont a:first-child {
+  margin-right: 10px
+}
+
+.Tgitem-Head {
+  border-bottom: 1px solid #BCBCBC
+}
+
+.Tgitem-Head .Task-Group-Form {
+  margin-bottom: 10px;
+}
+
+.Btn-Cont {
+  text-align: right;
+}
+
+.Task-Group-Add-Btn-Cont {
+  padding: 10px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -35,4 +127,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.List {
+
 }
