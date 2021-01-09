@@ -1,58 +1,67 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ItemTypes } from '../../util/itemTypes';
+import { TaskGroupItemContext } from '../task_groups/TaskGroupItem';
 import TaskForm from './TaskForm';
 
 export default function TaskItem(props) {
 	const ref = useRef();
+	const { updateCompetedPercentage } = useContext(TaskGroupItemContext);
 	const [showForm, setForm] = useState(false);
 
-	const [{ isDragging }, drag] = useDrag({
+	const removeTask = () => (
+  	props.removeTask(props.task.id)
+	)
+
+	const [, drag] = useDrag({
 	  item: {
 	  	type: ItemTypes.TASK,
-	  	taskId: props.task.id,
-	  	taskGroupId: props.task.task_group_id,
-	  	removeTask: () => { props.removeTask(props.task.id) },
-	  	indx: props.indx
+	  	task: props.task,
+	  	removeTask: removeTask,
+	  	indx: props.indx,
+	  	updateCompetedPercentage: () => updateCompetedPercentage()
 	  },
 	  collect: (monitor) => ({
 	    isDragging: !!monitor.isDragging()
 	  })
 	});
 
-	const [{ isOver }, drop] = useDrop({
+	const [, drop] = useDrop({
 		accept: ItemTypes.TASK,
 		drop(item, monitor) {
-			props.taskDropped();
+			props.taskDropped(item.task.id);
+			item.updateCompetedPercentage();
 		},
 		hover(item, monitor) {
 			const dragIndex = item.indx;
 			const hoverIndex = props.indx;
-			if (dragIndex === hoverIndex && item.taskGroupId === props.task.task_group_id) { return; }
+			if (item.task.id === props.task.id) { item.removeTask = removeTask }
+			if (dragIndex === hoverIndex && item.task.task_group_id === props.task.task_group_id) { return; }
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-			if (item.taskGroupId !== props.task.task_group_id) {
-
-				// console.log(hoverBoundingRect.left)
-				// console.log(hoverBoundingRect.width / 2)
-				// console.log( clientOffset.x)
-
-				if (props.task.task_group_id > item.taskGroupId
+			if (item.task.task_group_id !== props.task.task_group_id) {
+				if (props.task.task_group_id > item.task.task_group_id
 						&& (hoverBoundingRect.left + (hoverBoundingRect.width / 2) < clientOffset.x)) {
+	      	props.sortTask(dragIndex, hoverIndex, item.task);
 					item.removeTask();
-				} else if (props.task.task_group_id < item.taskGroupId
+	      	item.indx = hoverIndex;
+	      	item.task = { ...item.task, task_group_id: props.task.task_group_id };
+				} else if (props.task.task_group_id < item.task.task_group_id
 									 && (hoverBoundingRect.right - (hoverBoundingRect.width / 2) > clientOffset.x)) {
+	      	props.sortTask(dragIndex, hoverIndex, item.task);
 					item.removeTask();
+	      	item.indx = hoverIndex;
+	      	item.task = { ...item.task, task_group_id: props.task.task_group_id };
 				}
 			} else {
 	      if (dragIndex > hoverIndex
 	      		&& (hoverBoundingRect.top + (hoverBoundingRect.height / 2) > clientOffset.y) ) {
-	      	props.sortTask(dragIndex, hoverIndex, item.taskGroupId);
+	      	props.sortTask(dragIndex, hoverIndex, item.task);
 	      	item.indx = hoverIndex;
 	      } else if (dragIndex < hoverIndex
 	      					 && (hoverBoundingRect.top + (hoverBoundingRect.height / 2) < clientOffset.y) ) {
-	      	props.sortTask(dragIndex, hoverIndex, item.taskGroupId);
+	      	props.sortTask(dragIndex, hoverIndex, item.task);
 	      	item.indx = hoverIndex;
 	      }
 			}
@@ -70,6 +79,7 @@ export default function TaskItem(props) {
 		tasks[indx] = { ...tasks[indx], completed: !props.task.completed }
 		localStorage.setItem("tasks", JSON.stringify(tasks));
 		props.checkTaskstorage();
+		updateCompetedPercentage();
 	}
 
 	const changeShowForm = (show, e) => {
@@ -91,7 +101,8 @@ export default function TaskItem(props) {
 	return (
 		<div ref={ref}
 				 className={`Task-Item-Cont ${props.task.completed ? "Completed" : ""}`}
-				 style={{ opacity: (isDragging ? 0.4 : 1)}}>
+				 // style={{ opacity: (isDragging ? 0.4 : 1)}}
+				 >
 			{
 				showForm ?
 					<TaskForm taskId={taskId}
