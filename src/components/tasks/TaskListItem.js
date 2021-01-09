@@ -21,22 +21,19 @@ export default function TaskListItem(props) {
 	// })
 
 	const sortTask = useCallback((draggedIndex, hoverIndex) => {
-		console.log(draggedIndex, hoverIndex)
 		let newTasks = [];
 		let taskCopy = [...tasks];
 
-		// if (draggedIndex > hoverIndex) {
-
-		// } else {
-		// 	console.log("Hey");
-		// 	let y = [...taskCopy.slice(0, hoverIndex)];
-		// 	y[hoverIndex] = taskCopy[draggedIndex];
-		// 	newTasks = [...y, ...taskCopy.slice(hoverIndex, draggedIndex),...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
-		// }
-
-		let y = [...taskCopy.slice(0, hoverIndex)];
-		y[hoverIndex] = taskCopy[draggedIndex];
-		newTasks = [...y, ...taskCopy.slice(hoverIndex, draggedIndex),...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
+		if (draggedIndex > hoverIndex) {
+			newTasks = [...taskCopy.slice(0, hoverIndex)];
+			newTasks[hoverIndex] = taskCopy[draggedIndex];
+			newTasks = [...newTasks, ...taskCopy.slice(hoverIndex, draggedIndex),...taskCopy.slice(draggedIndex + 1, taskCopy.length)];
+		} else {
+			newTasks = [...taskCopy.slice(0, draggedIndex)];
+			newTasks = [...newTasks, ...taskCopy.slice(draggedIndex + 1, hoverIndex + 1)];
+			newTasks[hoverIndex] = taskCopy[draggedIndex];
+			newTasks = [...newTasks, ...taskCopy.slice(hoverIndex + 1, taskCopy.length )]
+		}
 
 		setTasks(newTasks);
   }, [tasks]);

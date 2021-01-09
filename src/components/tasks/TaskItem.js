@@ -30,7 +30,12 @@ export default function TaskItem(props) {
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-      if (dragIndex > hoverIndex && (hoverBoundingRect.top + (hoverBoundingRect.height / 1.5) > clientOffset.y) ) {
+      if (dragIndex > hoverIndex
+      		&& (hoverBoundingRect.top + (hoverBoundingRect.height / 2) > clientOffset.y) ) {
+      	props.sortTask(dragIndex, hoverIndex);
+      	item.indx = hoverIndex;
+      } else if (dragIndex < hoverIndex
+      					 && (hoverBoundingRect.top + (hoverBoundingRect.height / 2) < clientOffset.y) ) {
       	props.sortTask(dragIndex, hoverIndex);
       	item.indx = hoverIndex;
       }
