@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 // import { useDrop } from "react-dnd";
 // import { ItemTypes } from '../../util/itemTypes';
+import { TaskGroupItemContext } from '../task_groups/TaskGroupItem';
 import TaskItem from "./TaskItem";
 import AddTaskFormCont from './AddTaskFormCont';
 
 export default function TaskListItem(props) {
+	const { updateCompetedPercentage } = useContext(TaskGroupItemContext);
 	const [tasks, setTasks] = useState([]);
 
 	// const [{  }, drop] = useDrop({
@@ -49,6 +51,7 @@ export default function TaskListItem(props) {
 		if (!tasksStorage) { return; }
 		let newTasks = JSON.parse(tasksStorage).filter((task) => { return task.task_group_id === props.taskGroupId })
 		setTasks(newTasks);
+		updateCompetedPercentage();
 	}
 
 	useEffect(() => {

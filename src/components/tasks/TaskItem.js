@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ItemTypes } from '../../util/itemTypes';
+import { TaskGroupItemContext } from '../task_groups/TaskGroupItem';
 import TaskForm from './TaskForm';
 
 export default function TaskItem(props) {
 	const ref = useRef();
+	const { updateCompetedPercentage } = useContext(TaskGroupItemContext);
 	const [showForm, setForm] = useState(false);
 
 	const [{ isDragging }, drag] = useDrag({
@@ -52,6 +54,7 @@ export default function TaskItem(props) {
 		tasks[indx] = { ...tasks[indx], completed: !props.task.completed }
 		localStorage.setItem("tasks", JSON.stringify(tasks));
 		props.checkTaskstorage();
+		updateCompetedPercentage();
 	}
 
 	const changeShowForm = (show, e) => {
