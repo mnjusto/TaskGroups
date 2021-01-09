@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import TaskGroupForm from './TaskGroupForm';
 import TaskListItem from '../tasks/TaskListItem';
+import LinearProgressWithLabel from '../shared/LinearProgressWithLabel';
 
 function TaskGroupItem(props) {
 	const [showForm, setForm] = useState(false);
+	const [completedPercentage, setCompletedPercentage] = useState(0);
 
 	const deleteTaskGroup = (e) => {
 		e.preventDefault();
@@ -33,6 +35,8 @@ function TaskGroupItem(props) {
 						<span>
 							{props.taskGroup.name}
 						</span>
+
+						<LinearProgressWithLabel value={completedPercentage} />
 					</React.Fragment>
 				}
 			</div>
