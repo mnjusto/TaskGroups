@@ -11,6 +11,8 @@ export default function TaskItem(props) {
 	  item: {
 	  	type: ItemTypes.TASK,
 	  	taskId: props.task.id,
+	  	taskGroupId: props.task.task_group_id,
+	  	removeTask: () => { props.removeTask(props.task.id) },
 	  	indx: props.indx
 	  },
 	  collect: (monitor) => ({
@@ -26,19 +28,35 @@ export default function TaskItem(props) {
 		hover(item, monitor) {
 			const dragIndex = item.indx;
 			const hoverIndex = props.indx;
-			if (dragIndex === hoverIndex) { return; }
+			if (dragIndex === hoverIndex && item.taskGroupId === props.task.task_group_id) { return; }
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-      if (dragIndex > hoverIndex
-      		&& (hoverBoundingRect.top + (hoverBoundingRect.height / 2) > clientOffset.y) ) {
-      	props.sortTask(dragIndex, hoverIndex);
-      	item.indx = hoverIndex;
-      } else if (dragIndex < hoverIndex
-      					 && (hoverBoundingRect.top + (hoverBoundingRect.height / 2) < clientOffset.y) ) {
-      	props.sortTask(dragIndex, hoverIndex);
-      	item.indx = hoverIndex;
-      }
+			if (item.taskGroupId !== props.task.task_group_id) {
+
+				// console.log(hoverBoundingRect.left)
+				// console.log(hoverBoundingRect.width / 2)
+				// console.log( clientOffset.x)
+
+				if (props.task.task_group_id > item.taskGroupId
+						&& (hoverBoundingRect.left + (hoverBoundingRect.width / 2) < clientOffset.x)) {
+					item.removeTask();
+				} else if (props.task.task_group_id < item.taskGroupId
+									 && (hoverBoundingRect.right - (hoverBoundingRect.width / 2) > clientOffset.x)) {
+					item.removeTask();
+				}
+			} else {
+	      if (dragIndex > hoverIndex
+	      		&& (hoverBoundingRect.top + (hoverBoundingRect.height / 2) > clientOffset.y) ) {
+	      	props.sortTask(dragIndex, hoverIndex, item.taskGroupId);
+	      	item.indx = hoverIndex;
+	      } else if (dragIndex < hoverIndex
+	      					 && (hoverBoundingRect.top + (hoverBoundingRect.height / 2) < clientOffset.y) ) {
+	      	props.sortTask(dragIndex, hoverIndex, item.taskGroupId);
+	      	item.indx = hoverIndex;
+	      }
+			}
+
 		},
 		collect: monitor => ({
 			isOver: monitor.isOver(),
