@@ -1,3 +1,7 @@
+body {
+  background-color: #F8F7F8;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
 }
@@ -33,7 +37,9 @@ a {
 }
 
 .Button {
-  background-color: #3f51b5;
+  background-color: #1261A0;
+  /*background-color: #3f51b5;*/
+
   border: 1px solid;
   border-radius: 6px;
   color: #FFF;
@@ -47,7 +53,7 @@ a {
 }
 
 .Button.mgrght {
-  margin-right: 10px
+  margin-right: 6px
 }
 
 .List-Cont {
@@ -67,8 +73,10 @@ form.Task-Group-Form input[type=text] {
 }
 
 .Task-Group-Item-Cont {
+  background-color: #FFF;
   border: 1px solid #DEDEDE;
   border-radius: 6px;
+  box-shadow: 0 0 6px #DADADA;
   margin: 0 10px 10px 0;
   min-width: 300px;
   padding: 10px;
@@ -80,7 +88,7 @@ form.Task-Group-Form input[type=text] {
 }
 
 .Tgitem-Head a:first-child {
-  margin-right: 10px
+  margin-right: 6px
 }
 
 .Tgitem-Head {
@@ -100,7 +108,18 @@ form.Task-Group-Form input[type=text] {
   padding: 10px;
 }
 .Task-List-Item-Cont {
+  background: #DCDCDC;
+  border-radius: 6px;
   min-height: 10px;
+  padding: 4px;
+}
+
+button.Add-Task {
+  align-items: center;
+  display: flex;
+  font-weight: bold;
+  justify-content: center;
+  width: 100%;
 }
 
 .Task-Item-Cont {
@@ -121,11 +140,19 @@ form.Task-Group-Form input[type=text] {
 }
 
 .Task-Item-Cont .Btn-Cont a {
-  margin-right: 10px;
+  margin-right: 6px;
 }
 
 .Task-Item-Cont .Btn-Cont a:last-child {
   margin-right: 0;
+}
+
+.Add-Task-Form input[type=text] {
+  margin-bottom: 10px;
+}
+
+.Add-Task-Form .Btn-Cont .Button {
+  margin-right: 6px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

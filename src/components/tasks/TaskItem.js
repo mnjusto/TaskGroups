@@ -3,6 +3,10 @@ import { useDrag, useDrop } from 'react-dnd';
 import { ItemTypes } from '../../util/itemTypes';
 import { TaskGroupItemContext } from '../task_groups/TaskGroupItem';
 import TaskForm from './TaskForm';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
+import RestoreIcon from '@material-ui/icons/Restore';
 
 export default function TaskItem(props) {
 	const ref = useRef();
@@ -115,9 +119,18 @@ export default function TaskItem(props) {
 						<span>{name}</span>
 
 						<div className="Btn-Cont">
-							<a href="#" onClick={(e) => {changeTaskStatus(e)}}>{ props.task.completed ? "Revive" : "Complete"}</a>
-							<a href="#" onClick={(e) => {changeShowForm(true, e)}}>Edit</a>
-							<a href="#" onClick={(e) => {deleteTask(e)}}>Delete</a>
+							<a href="#" title={props.task.completed ? "Revive" : "Complete"}
+								 onClick={(e) => {changeTaskStatus(e)}}>
+								{ props.task.completed ? <RestoreIcon/> : <DoneIcon/>}
+							</a>
+							<a href="#" title="Edit"
+								 onClick={(e) => {changeShowForm(true, e)}}>
+								<EditIcon/>
+							</a>
+							<a href="#" title="Delete"
+								 onClick={(e) => {deleteTask(e)}}>
+								<DeleteIcon/>
+							</a>
 						</div>
 					</React.Fragment>
 			}

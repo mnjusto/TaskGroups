@@ -122,7 +122,7 @@ export default function TaskListItem(props) {
 					})
 				}
 			</div>
-			{ tasks.length ? <hr/> : null }
+			<hr/>
 			<AddTaskFormCont taskGroupId={ props.taskGroupId }
 											 checkTaskstorage={checkTaskstorage}/>
 		</React.Fragment>

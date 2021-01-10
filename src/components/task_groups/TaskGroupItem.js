@@ -2,6 +2,8 @@ import React, { useState, createContext } from 'react';
 import TaskGroupForm from './TaskGroupForm';
 import TaskListItem from '../tasks/TaskListItem';
 import LinearProgressWithLabel from '../shared/LinearProgressWithLabel';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export const TaskGroupItemContext = createContext({
 	updateCompetedPercentage: null
@@ -33,32 +35,34 @@ function TaskGroupItem(props) {
 	}
 
 	return(
-		<div className="Task-Group-Item-Cont">
-			<div className="Tgitem-Head">
-				{
-					showForm ?
-					<TaskGroupForm taskGroupId={props.taskGroup.id}
-												 taskGroupName={props.taskGroup.name}
-												 changeShowForm={setForm}
-												 checkTaskGroupStorage={props.checkTaskGroupStorage}/>
-					:
-					<React.Fragment>
-						<div className="Btn-Cont">
-							<a href="#" onClick={(e) => setForm(true)}>Edit</a>
-							<a href="#" onClick={(e) => deleteTaskGroup(e)}>Delete</a>
-						</div>
+		<div>
+			<div className="Task-Group-Item-Cont">
+				<div className="Tgitem-Head">
+					{
+						showForm ?
+						<TaskGroupForm taskGroupId={props.taskGroup.id}
+													 taskGroupName={props.taskGroup.name}
+													 changeShowForm={setForm}
+													 checkTaskGroupStorage={props.checkTaskGroupStorage}/>
+						:
+						<React.Fragment>
+							<div className="Btn-Cont">
+								<a href="#" title="Edit" onClick={(e) => setForm(true)}><EditIcon/></a>
+								<a href="#" title="Delete" onClick={(e) => deleteTaskGroup(e)}><DeleteIcon/></a>
+							</div>
 
-						<span>
-							{props.taskGroup.name}
-						</span>
+							<span>
+								{props.taskGroup.name}
+							</span>
 
-						<LinearProgressWithLabel value={completedPercentage} />
-					</React.Fragment>
-				}
+							<LinearProgressWithLabel value={completedPercentage} />
+						</React.Fragment>
+					}
+				</div>
+				<TaskGroupItemContext.Provider value={{updateCompetedPercentage}}>
+					<TaskListItem taskGroupId={props.taskGroup.id}/>
+				</TaskGroupItemContext.Provider>
 			</div>
-			<TaskGroupItemContext.Provider value={{updateCompetedPercentage}}>
-				<TaskListItem taskGroupId={props.taskGroup.id}/>
-			</TaskGroupItemContext.Provider>
 		</div>
 	)
 }

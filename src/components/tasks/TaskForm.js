@@ -56,10 +56,12 @@ export default function TaskForm(props) {
 	}
 
 	return (
-		<form onSubmit={(e) => submit(e)}>
+		<form className="Add-Task-Form" onSubmit={(e) => submit(e)}>
 			<input ref={taskName} type="text" defaultValue={ props.taskName || "" } placeholder="task here..."/>
-			<input type="button" className="Button" value="Save" onClick={(e) => submit(e)}/>
-			<button type="button" className="Button" onClick={(e) => props.cancel()}>Cancel</button>
+			<div className="Btn-Cont">
+				<input type="button" className="Button" value="Save" onClick={(e) => submit(e)}/>
+				<button type="button" className="Button" onClick={(e) => props.cancel()}>Cancel</button>
+			</div>
 		</form>
 	)
 }

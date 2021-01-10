@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TaskForm from "./TaskForm";
+import AddIcon from '@material-ui/icons/Add';
 
 export default function AddTaskFormCont(props) {
 	const [showForm, setForm] = useState(false);
@@ -16,7 +17,9 @@ export default function AddTaskFormCont(props) {
 		)
 	} else {
 		return (
-			<button className="Button" onClick={(e) => changeShowForm(true)}>Add Task</button>
+			<button className="Button Add-Task" onClick={(e) => changeShowForm(true)}>
+				<AddIcon/> Add Task
+			</button>
 		)
 	}
 
