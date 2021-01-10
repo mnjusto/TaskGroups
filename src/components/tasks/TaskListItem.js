@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { useDrop } from "react-dnd";
 import { ItemTypes } from '../../util/itemTypes';
 import { TaskGroupItemContext } from '../task_groups/TaskGroupItem';
@@ -6,6 +6,7 @@ import TaskItem from "./TaskItem";
 import AddTaskFormCont from './AddTaskFormCont';
 
 export default function TaskListItem(props) {
+	const ref = useRef(null);
 	const { updateCompetedPercentage } = useContext(TaskGroupItemContext);
 	const [tasks, setTasks] = useState([]);
 
@@ -15,7 +16,25 @@ export default function TaskListItem(props) {
 			// console.log(item)
 		},
 		hover(item, monitor) {
-			// console.log(item)
+			if (tasks.length) { return; }
+			console.log(item)
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const clientOffset = monitor.getClientOffset();
+			if (props.taskGroupId > item.task.task_group_id
+						&& (hoverBoundingRect.left + (hoverBoundingRect.width / 2) < clientOffset.x)) {
+				console.log("if")
+      	sortTask(null, 0, item.task);
+				item.removeTask();
+      	item.indx = 0;
+      	item.task = { ...item.task, task_group_id: props.taskGroupId };
+			} else if (props.taskGroupId < item.task.task_group_id
+								 && (hoverBoundingRect.right - (hoverBoundingRect.width / 2) > clientOffset.x)) {
+			console.log("else if")
+      	sortTask(null, 0, item.task);
+				item.removeTask();
+      	item.indx = 0;
+      	item.task = { ...item.task, task_group_id: props.taskGroupId };
+			}
 		},
 		collect: monitor => ({
 			// isOver: monitor.isOver(),
@@ -23,6 +42,7 @@ export default function TaskListItem(props) {
 	});
 
 	const sortTaskSameGroup = (draggedIndex, hoverIndex) => {
+		console.log("sortTaskSameGroup")
 		let newTasks = [];
 		let taskCopy = [...tasks];
 
@@ -41,7 +61,7 @@ export default function TaskListItem(props) {
 	}
 
 	const sortTaskDiffGroup = (draggedTask, hoverIndex) => {
-		console.log(props.taskGroupId, draggedTask.task_group_id)
+		console.log("sortTaskDiffGroup")
 		let newTasks = [];
 		let taskCopy = [...tasks];
 		newTasks = [...taskCopy.slice(0, hoverIndex)]
@@ -78,16 +98,17 @@ export default function TaskListItem(props) {
 	}
 
 	const removeTask = (taskId) => {
-		setTasks(tasks.filter(task => { return task.id != taskId }));
+		setTasks(tasks.filter(task => { return task.id !== taskId }));
 	}
 
 	useEffect(() => {
 		checkTaskstorage();
   }, []);
 
+	drop(ref)
 	return (
 		<React.Fragment>
-			<div className="Task-List-Item-Cont">
+			<div ref={ref} className="Task-List-Item-Cont">
 			{
 				//<div className="Task-List-Item-Cont">
 				//<div ref={drop} className="Task-List-Item-Cont">
