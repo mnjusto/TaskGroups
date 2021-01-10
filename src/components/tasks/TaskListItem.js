@@ -17,19 +17,16 @@ export default function TaskListItem(props) {
 		},
 		hover(item, monitor) {
 			if (tasks.length) { return; }
-			console.log(item)
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
 			if (props.taskGroupId > item.task.task_group_id
 						&& (hoverBoundingRect.left + (hoverBoundingRect.width / 2) < clientOffset.x)) {
-				console.log("if")
       	sortTask(null, 0, item.task);
 				item.removeTask();
       	item.indx = 0;
       	item.task = { ...item.task, task_group_id: props.taskGroupId };
 			} else if (props.taskGroupId < item.task.task_group_id
 								 && (hoverBoundingRect.right - (hoverBoundingRect.width / 2) > clientOffset.x)) {
-			console.log("else if")
       	sortTask(null, 0, item.task);
 				item.removeTask();
       	item.indx = 0;
@@ -42,7 +39,6 @@ export default function TaskListItem(props) {
 	});
 
 	const sortTaskSameGroup = (draggedIndex, hoverIndex) => {
-		console.log("sortTaskSameGroup")
 		let newTasks = [];
 		let taskCopy = [...tasks];
 
@@ -61,7 +57,6 @@ export default function TaskListItem(props) {
 	}
 
 	const sortTaskDiffGroup = (draggedTask, hoverIndex) => {
-		console.log("sortTaskDiffGroup")
 		let newTasks = [];
 		let taskCopy = [...tasks];
 		newTasks = [...taskCopy.slice(0, hoverIndex)]
