@@ -10,7 +10,8 @@ export default function TaskListItem(props) {
 	const { updateCompetedPercentage } = useContext(TaskGroupItemContext);
 	const [tasks, setTasks] = useState([]);
 
-	const [{  }, drop] = useDrop({
+	// eslint-disable-next-line no-empty-pattern
+	const [{}, drop] = useDrop({
 		accept: ItemTypes.TASK,
 		drop(item, monitor) {
 			// console.log(item)
@@ -38,7 +39,7 @@ export default function TaskListItem(props) {
 		})
 	});
 
-	const sortTaskSameGroup = (draggedIndex, hoverIndex) => {
+	const sortTaskSameGroup = useCallback((draggedIndex, hoverIndex) => {
 		let newTasks = [];
 		let taskCopy = [...tasks];
 
@@ -54,16 +55,16 @@ export default function TaskListItem(props) {
 		}
 
 		setTasks(newTasks);
-	}
+	}, [tasks])
 
-	const sortTaskDiffGroup = (draggedTask, hoverIndex) => {
+	const sortTaskDiffGroup = useCallback((draggedTask, hoverIndex) => {
 		let newTasks = [];
 		let taskCopy = [...tasks];
 		newTasks = [...taskCopy.slice(0, hoverIndex)]
 		newTasks[hoverIndex] = { ...draggedTask, task_group_id: props.taskGroupId };
 		newTasks = [...newTasks, ...taskCopy.slice(hoverIndex, taskCopy.length)];
 		setTasks(newTasks);
-	}
+	}, [props.taskGroupId, tasks])
 
 	const sortTask = useCallback((draggedIndex, hoverIndex, draggedTask) => {
 		if (draggedTask.task_group_id === props.taskGroupId) {
@@ -71,7 +72,7 @@ export default function TaskListItem(props) {
 		} else {
 			sortTaskDiffGroup(draggedTask, hoverIndex)
 		}
-  }, [tasks]);
+  }, [props.taskGroupId, sortTaskDiffGroup, sortTaskSameGroup]);
 
   const taskDropped = (taskId) => {
 		let tasksStorage = JSON.parse(localStorage.getItem('tasks'));
@@ -84,13 +85,13 @@ export default function TaskListItem(props) {
 		localStorage.setItem('tasks', JSON.stringify([...newTasks, ...tasks]));
   }
 
-	const checkTaskstorage = () => {
+	const checkTaskstorage = useCallback(() => {
 		let tasksStorage = localStorage.getItem('tasks');
 		if (!tasksStorage) { return; }
 		let newTasks = JSON.parse(tasksStorage).filter((task) => { return task.task_group_id === props.taskGroupId })
 		setTasks(newTasks);
 		updateCompetedPercentage();
-	}
+	}, [props.taskGroupId, updateCompetedPercentage])
 
 	const removeTask = (taskId) => {
 		setTasks(tasks.filter(task => { return task.id !== taskId }));
@@ -98,7 +99,7 @@ export default function TaskListItem(props) {
 
 	useEffect(() => {
 		checkTaskstorage();
-  }, []);
+  }, [checkTaskstorage]);
 
 	drop(ref)
 	return (
